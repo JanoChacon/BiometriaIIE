@@ -2089,10 +2089,16 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     validar: function validar() {
       var _this2 = this;
 
-      axios.get("http://127.0.0.1:8000/apicall").then(function (res) {
+      var formData = new FormData();
+      this.img = this.$refs.webcam.capture();
+      formData.append('image64', this.img);
+      axios.post("http://127.0.0.1:8000/apicall", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (res) {
         _this2.recursos = res.data;
         console.log(_this2.recursos);
-        _this2.img = _this2.$refs.webcam.capture();
       });
     },
     onCapture: function onCapture() {
@@ -2112,7 +2118,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
   created: function created() {
     this.interval = setInterval(function () {
       this.validar();
-    }.bind(this), 8000);
+    }.bind(this), 10000);
   },
   beforeDestroy: function beforeDestroy() {
     clearInterval(this.recursos);
@@ -37627,7 +37633,7 @@ var render = function() {
         return _c("div", { staticClass: "container" }, [
           _c("h5", [_vm._v(_vm._s(recurso.mensaje))]),
           _vm._v(" "),
-          _c("p", [_vm._v("al fin funciona esta cosa.")])
+          _c("p", [_vm._v("peticion.")])
         ])
       })
     ],

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6d9ca6165a4c3e002dbf78d274001bcd",
+    "content-hash": "983469df980bee5254dcae1020840c20",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -555,6 +555,147 @@
             "time": "2018-12-04T20:46:45+00:00"
         },
         {
+            "name": "guzzlehttp/ringphp",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/RingPHP.git",
+                "reference": "5e2a174052995663dd68e6b5ad838afd47dd615b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/RingPHP/zipball/5e2a174052995663dd68e6b5ad838afd47dd615b",
+                "reference": "5e2a174052995663dd68e6b5ad838afd47dd615b",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/streams": "~3.0",
+                "php": ">=5.4.0",
+                "react/promise": "~2.0"
+            },
+            "require-dev": {
+                "ext-curl": "*",
+                "phpunit/phpunit": "~4.0"
+            },
+            "suggest": {
+                "ext-curl": "Guzzle will use specific adapters if cURL is present"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Ring\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Provides a simple API and specification that abstracts away the details of HTTP into a single PHP function.",
+            "time": "2018-07-31T13:22:33+00:00"
+        },
+        {
+            "name": "guzzlehttp/streams",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/streams.git",
+                "reference": "47aaa48e27dae43d39fc1cea0ccf0d84ac1a2ba5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/streams/zipball/47aaa48e27dae43d39fc1cea0ccf0d84ac1a2ba5",
+                "reference": "47aaa48e27dae43d39fc1cea0ccf0d84ac1a2ba5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Stream\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Provides a simple abstraction over streams of data",
+            "homepage": "http://guzzlephp.org/",
+            "keywords": [
+                "Guzzle",
+                "stream"
+            ],
+            "time": "2014-10-12T19:18:40+00:00"
+        },
+        {
+            "name": "ibuffer/faceplusplus",
+            "version": "0.0.03",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ibuffer/faceplusplus.git",
+                "reference": "7fa98cb1595c8fe079e083100a7ba44ebe9dece3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ibuffer/faceplusplus/zipball/7fa98cb1595c8fe079e083100a7ba44ebe9dece3",
+                "reference": "7fa98cb1595c8fe079e083100a7ba44ebe9dece3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ibuffer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Lynn",
+                    "email": "lynn1212@vip.qq.com"
+                }
+            ],
+            "description": "Face++ SDK",
+            "keywords": [
+                "faceplusplus",
+                "sdk"
+            ],
+            "time": "2015-05-25T03:35:46+00:00"
+        },
+        {
             "name": "jakub-onderka/php-console-color",
             "version": "v0.2",
             "source": {
@@ -1073,6 +1214,47 @@
                 "time"
             ],
             "time": "2019-05-30T10:15:05+00:00"
+        },
+        {
+            "name": "nguyenvanduocit/face-sdk",
+            "version": "v0.1-beta.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nguyenvanduocit/FaceSDK.git",
+                "reference": "298dbdd83efc85ffcf329179af38b22ba8593048"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nguyenvanduocit/FaceSDK/zipball/298dbdd83efc85ffcf329179af38b22ba8593048",
+                "reference": "298dbdd83efc85ffcf329179af38b22ba8593048",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.1",
+                "guzzlehttp/ringphp": "^1.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FaceSDK\\": "src/FaceSDK"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "nguyenvanduocit",
+                    "email": "nguyenvanduocit@gmail.com",
+                    "homepage": "http://nvduoc.senviet.org"
+                }
+            ],
+            "description": "PHP SDK for face recognition using faceplusplus.com",
+            "time": "2015-10-10T11:48:02+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -1670,6 +1852,52 @@
                 "uuid"
             ],
             "time": "2018-07-19T23:38:55+00:00"
+        },
+        {
+            "name": "react/promise",
+            "version": "v2.7.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reactphp/promise.git",
+                "reference": "31ffa96f8d2ed0341a57848cbb84d88b89dd664d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reactphp/promise/zipball/31ffa96f8d2ed0341a57848cbb84d88b89dd664d",
+                "reference": "31ffa96f8d2ed0341a57848cbb84d88b89dd664d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "React\\Promise\\": "src/"
+                },
+                "files": [
+                    "src/functions_include.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jan Sorgalla",
+                    "email": "jsorgalla@gmail.com"
+                }
+            ],
+            "description": "A lightweight implementation of CommonJS Promises/A for PHP",
+            "keywords": [
+                "promise",
+                "promises"
+            ],
+            "time": "2019-01-07T21:25:54+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -3089,6 +3317,56 @@
             "description": "CssToInlineStyles is a class that enables you to convert HTML-pages/files into HTML-pages/files with inline styles. This is very useful when you're sending emails.",
             "homepage": "https://github.com/tijsverkoyen/CssToInlineStyles",
             "time": "2017-11-27T11:13:29+00:00"
+        },
+        {
+            "name": "tinfot/faceplusplus",
+            "version": "v0.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tinfot/faceplusplus.git",
+                "reference": "e51ca61edec2defb7e97db0984ba0adb13e5f9c0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tinfot/faceplusplus/zipball/e51ca61edec2defb7e97db0984ba0adb13e5f9c0",
+                "reference": "e51ca61edec2defb7e97db0984ba0adb13e5f9c0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^3.7",
+                "phpunit/phpunit": "^7.3@dev"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Tinfot\\Faceplusplus\\FaceplusplusServiceProvider"
+                    ],
+                    "aliases": {
+                        "Faceplusplus": "Tinfot\\Faceplusplus\\Facades\\Faceplusplus"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Tinfot\\Faceplusplus\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Richard",
+                    "email": "richard_tianke@qq.com"
+                }
+            ],
+            "description": "Face Plus Plus For Laravel",
+            "time": "2018-11-22T04:03:02+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -4910,7 +5188,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "nguyenvanduocit/face-sdk": 10
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

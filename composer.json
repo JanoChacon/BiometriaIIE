@@ -11,8 +11,11 @@
         "php": "^7.1.3",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.3",
+        "ibuffer/faceplusplus": "0.0.*",
         "laravel/framework": "5.8.*",
-        "laravel/tinker": "^1.0"
+        "laravel/tinker": "^1.0",
+        "nguyenvanduocit/face-sdk": "^0.1.0@beta",
+        "tinfot/faceplusplus": "^0.0.5"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

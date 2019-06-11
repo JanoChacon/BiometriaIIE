@@ -17,7 +17,7 @@ Route::group(['middleware' => 'cors'], function(){
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('apicall','ApiController@index');
+Route::post('apicall','ApiController@index');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

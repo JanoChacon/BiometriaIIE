@@ -19,7 +19,7 @@
 
     <div class="container" v-for="recurso in recursos">
       <h5>{{ recurso.mensaje }}</h5>
-      <p>al fin funciona esta cosa.</p>
+      <p>peticion.</p>
     </div>
   </div>
 
@@ -60,11 +60,18 @@ export default {
   },
   methods: {
     validar() {
-      axios.get("http://127.0.0.1:8000/apicall").then(res => {
-        this.recursos = res.data;
-        console.log(this.recursos);
+        let formData = new FormData();
         this.img = this.$refs.webcam.capture();
-      });
+        formData.append('image64', this.img);
+        axios.post("http://127.0.0.1:8000/apicall", formData, {
+                headers: {
+                  'Content-Type': 'multipart/form-data'
+                }
+            }).then(res => {
+            this.recursos = res.data;
+
+            console.log(this.recursos);
+        });
     },
     onCapture() {
       this.img = this.$refs.webcam.capture();
@@ -86,7 +93,7 @@ export default {
       function() {
         this.validar();
       }.bind(this),
-      8000
+      10000
     );
   },
   beforeDestroy() {
