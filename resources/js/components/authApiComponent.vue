@@ -1,25 +1,20 @@
 <template>
   <div class="row">
-
     <div class="border">
       <vue-web-cam
         ref="webcam"
         :device-id="deviceId"
         class="img-fluid img-thumbnail"
+        style="display: none;"
         @error="onError"
         @cameras="onCameras"
       />
-    </div>
-
-    <div class="border">
-        <figure class="figure">
-          <img :src="img" class="img-fluid img-thumbnail">
+      <figure class="figure">
+         <!--  <img :src="img" ref="faceframe" class="img-fluid" id="faceframe"> -->
+          <canvas ref="canvas" id="canvas" class="img-fluid">
+            Your browser does not support the HTML5 canvas tag.
+            </canvas>
         </figure>
-    </div>
-
-    <div class="container" v-for="recurso in recursos">
-      <h5>{{ recurso.mensaje }}</h5>
-      <p>peticion.</p>
     </div>
   </div>
 
@@ -27,10 +22,9 @@
 
 <script>
 import { WebCam } from "vue-web-cam";
+
 export default {
-    components: {
-    "vue-web-cam": WebCam
-  },
+
   data: function() {
     return {
         img: null,
@@ -60,19 +54,26 @@ export default {
   },
   methods: {
     validar() {
-        let formData = new FormData();
+
         this.img = this.$refs.webcam.capture();
+
+        let formData = new FormData();
+
         formData.append('image64', this.img);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
         axios.post("http://127.0.0.1:8000/apicall", formData, {
                 headers: {
                   'Content-Type': 'multipart/form-data'
                 }
             }).then(res => {
             this.recursos = res.data;
+            this.draw(this.img);
 
-            console.log(this.recursos);
+        }).catch(err => {
+            console.log(err);
         });
     },
+
     onCapture() {
       this.img = this.$refs.webcam.capture();
     },
@@ -85,6 +86,40 @@ export default {
     onCameras(cameras) {
       this.devices = cameras;
       console.log("On Cameras Event", cameras);
+    },
+
+    draw(imgscr) {
+
+        var ctx = document.getElementById('canvas').getContext('2d');
+
+        var img = new Image();
+
+        if  (null != this.recursos.faces[0]){
+
+            var x1 = this.recursos.faces[0].face_rectangle.left;
+            var y1 = this.recursos.faces[0].face_rectangle.top;
+            var x2 = this.recursos.faces[0].face_rectangle.width;
+            var y2 = this.recursos.faces[0].face_rectangle.height;
+
+            img.onload = function() {
+                canvas.width = img.naturalWidth
+                canvas.height = img.naturalHeight
+                ctx.strokeStyle = "#FF0000";
+                ctx.lineWidth = 5;
+                ctx.drawImage(img,0,0);
+                ctx.strokeRect(x1, y1, x2, y2);
+            };
+        }else {
+            img.onload = function() {
+                canvas.width = img.naturalWidth
+                canvas.height = img.naturalHeight
+                ctx.font = '24px serif';
+                ctx.drawImage(img,0,0);
+                ctx.fillText('No detectado', 50, 50);
+             };
+        };
+
+        img.src = imgscr;
     }
   },
 
@@ -93,7 +128,7 @@ export default {
       function() {
         this.validar();
       }.bind(this),
-      10000
+      5000
     );
   },
   beforeDestroy() {

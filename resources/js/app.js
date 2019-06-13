@@ -8,6 +8,9 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import BootstrapVue from 'bootstrap-vue';
+Vue.use(BootstrapVue);
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -22,6 +25,7 @@ window.Vue = require('vue');
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('authapi-component', require('./components/authApiComponent.vue').default);
 Vue.component('webcam-component', require('./components/WebcamComponent.vue').default);
+Vue.component('register-component', require('./components/faceRegister.vue').default);
 
 
 /**
