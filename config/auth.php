@@ -68,7 +68,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => BiometriaIEE\User::class,
+            'model' => BiometriaIIE\User::class,
         ],
 
         // 'users' => [

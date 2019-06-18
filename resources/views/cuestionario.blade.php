@@ -1,12 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="row justify-content-around">
     <div class="col-md-3 col-md-offset-2">
 
         <div class="container-fluid">
             <div class="jumbotron">
-                <authapi-component></authapi-component>
+                <authapi-component :refresh-data="'{!! json_encode($loaded) !!}'" ></authapi-component>
             </div>
         </div>
     </div>

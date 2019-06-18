@@ -1,6 +1,6 @@
 <?php
 
-namespace BiometriaIEE\Providers;
+namespace BiometriaIIE\Providers;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -13,7 +13,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'BiometriaIEE\Model' => 'BiometriaIEE\Policies\ModelPolicy',
+        // 'BiometriaIIE\Model' => 'BiometriaIIE\Policies\ModelPolicy',
     ];
 
     /**

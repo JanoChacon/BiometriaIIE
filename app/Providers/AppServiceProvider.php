@@ -1,6 +1,6 @@
 <?php
 
-namespace BiometriaIEE\Providers;
+namespace BiometriaIIE\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;

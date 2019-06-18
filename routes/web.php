@@ -10,23 +10,22 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::group(['middleware' => 'cors'], function(){
 
-});
 
 Route::get('/', function () {
     return view('welcome');
 });
-Route::post('apicall','ApiController@index');
+Route::post('api-detect','ApiController@apiDetect');
+Route::post('api-compare','ApiController@apiCompare');
+Route::post('session-validate','ApiController@apiSession');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/cuestionario', 'ApiController@index')->name('cuestionario')->middleware('auth');
 
 
-Route::get('/cuestionario', function () {
-    return view('cuestionario');
-});
 
 
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace BiometriaIEE\Console;
+namespace BiometriaIIE\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;

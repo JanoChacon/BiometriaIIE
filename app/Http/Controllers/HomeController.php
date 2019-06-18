@@ -1,6 +1,6 @@
 <?php
 
-namespace BiometriaIEE\Http\Controllers;
+namespace BiometriaIIE\Http\Controllers;
 
 use Illuminate\Http\Request;
 

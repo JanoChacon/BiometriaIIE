@@ -28,17 +28,17 @@ $app = new Illuminate\Foundation\Application(
 
 $app->singleton(
     Illuminate\Contracts\Http\Kernel::class,
-    BiometriaIEE\Http\Kernel::class
+    BiometriaIIE\Http\Kernel::class
 );
 
 $app->singleton(
     Illuminate\Contracts\Console\Kernel::class,
-    BiometriaIEE\Console\Kernel::class
+    BiometriaIIE\Console\Kernel::class
 );
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
-    BiometriaIEE\Exceptions\Handler::class
+    BiometriaIIE\Exceptions\Handler::class
 );
 
 /*

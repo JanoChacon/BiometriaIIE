@@ -1,6 +1,6 @@
 <?php
 
-namespace BiometriaIEE\Providers;
+namespace BiometriaIIE\Providers;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;

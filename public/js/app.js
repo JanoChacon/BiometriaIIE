@@ -2000,10 +2000,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/authApiComponent.vue?vue&type=script&lang=js&":
-/*!***************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/authApiComponent.vue?vue&type=script&lang=js& ***!
-  \***************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/continuousAuth.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/continuousAuth.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2041,15 +2041,154 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['refreshData'],
   data: function data() {
     return {
       img: null,
       camera: null,
       deviceId: null,
       devices: [],
-      recursos: []
+      recursos: [],
+      email: null,
+      password: null,
+      conf: 78,
+      facelength: 1,
+      begin: false
     };
   },
   computed: {
@@ -2078,24 +2217,79 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     }
   },
   methods: {
-    validar: function validar() {
+    validarRostro: function validarRostro() {
       var _this2 = this;
 
-      this.img = this.$refs.webcam.capture();
-      var formData = new FormData();
-      formData.append('image64', this.img);
-      formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-      axios.post("http://127.0.0.1:8000/apicall", formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then(function (res) {
-        _this2.recursos = res.data;
+      if (this.img != this.$refs.webcam.capture() && this.deviceId != null) {
+        this.img = this.$refs.webcam.capture();
+        console.log("device: " + this.deviceId);
+        var formData = new FormData();
+        formData.append('image64', this.img);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        axios.post("http://127.0.0.1:8000/api-compare", formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(function (res) {
+          _this2.recursos = res.data;
+          console.log("confidence api: " + _this2.recursos.confidence);
+          console.log("promedio: " + _this2.conf);
+          _this2.facelength = _this2.recursos.faces2.length;
 
-        _this2.draw(_this2.img);
-      })["catch"](function (err) {
-        console.log(err);
-      });
+          if (typeof _this2.recursos.confidence != 'undefined' && _this2.recursos.confidence != null) {
+            _this2.conf = (_this2.conf + _this2.recursos.confidence) / 2;
+          } else {
+            _this2.conf = _this2.conf / 2;
+          }
+
+          if (_this2.conf < 78 && _this2.facelength != 1 && _this2.begin) {
+            $('#validateModal').modal('show');
+          }
+        })["catch"](function (err) {
+          console.log(err);
+        });
+      } else if (this.begin) {
+        $('#nowebcamModal').modal('show');
+      }
+    },
+    beginTest: function beginTest() {
+      if (this.deviceId != null && this.img != this.$refs.webcam.capture()) {
+        if (this.recursos.confidence >= 78 && this.recursos.faces2.length == 1) {
+          this.begin = true;
+          $('#inicioModal').modal('hide');
+          $('#incorrectdataInicio-alert').modal('hide');
+        } else {
+          $('#incorrectdataInicio-alert').modal('show');
+        }
+      }
+    },
+    validarSesion: function validarSesion() {
+      console.log("confidence api para sesion: " + this.recursos.confidence);
+      console.log("promedio para sesion: " + this.conf);
+      console.log("device para sesion : " + this.deviceId);
+
+      if (this.recursos.confidence > 78 && this.facelength == 1) {
+        var formData = new FormData();
+        formData.append('email', this.email);
+        formData.append('password', this.password);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        axios.post("http://127.0.0.1:8000/session-validate", formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(function (res) {
+          if (res.data == true) {
+            $('#incorrectdata-alert').modal('hide');
+            $('#validateModal').modal('hide');
+          } else {
+            $('#incorrectdata-alert').modal('show');
+          }
+        })["catch"](function (err) {
+          console.log(err);
+        });
+      } else {
+        $('#incorrectdata-alert').modal('show');
+      }
     },
     onCapture: function onCapture() {
       this.img = this.$refs.webcam.capture();
@@ -2109,43 +2303,15 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     onCameras: function onCameras(cameras) {
       this.devices = cameras;
       console.log("On Cameras Event", cameras);
-    },
-    draw: function draw(imgscr) {
-      var ctx = document.getElementById('canvas').getContext('2d');
-      var img = new Image();
-
-      if (null != this.recursos.faces[0]) {
-        var x1 = this.recursos.faces[0].face_rectangle.left;
-        var y1 = this.recursos.faces[0].face_rectangle.top;
-        var x2 = this.recursos.faces[0].face_rectangle.width;
-        var y2 = this.recursos.faces[0].face_rectangle.height;
-
-        img.onload = function () {
-          canvas.width = img.naturalWidth;
-          canvas.height = img.naturalHeight;
-          ctx.strokeStyle = "#FF0000";
-          ctx.lineWidth = 5;
-          ctx.drawImage(img, 0, 0);
-          ctx.strokeRect(x1, y1, x2, y2);
-        };
-      } else {
-        img.onload = function () {
-          canvas.width = img.naturalWidth;
-          canvas.height = img.naturalHeight;
-          ctx.font = '24px serif';
-          ctx.drawImage(img, 0, 0);
-          ctx.fillText('No detectado', 50, 50);
-        };
-      }
-
-      ;
-      img.src = imgscr;
     }
   },
   created: function created() {
     this.interval = setInterval(function () {
-      this.validar();
+      this.validarRostro();
     }.bind(this), 5000);
+  },
+  mounted: function mounted() {
+    $('#inicioModal').modal('show');
   },
   beforeDestroy: function beforeDestroy() {
     clearInterval(this.recursos);
@@ -2271,7 +2437,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       var formData = new FormData();
       formData.append('image64', this.img);
       formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-      axios.post("http://127.0.0.1:8000/apicall", formData, {
+      axios.post("http://127.0.0.1:8000/api-detect", formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -2282,9 +2448,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       })["catch"](function (err) {
         console.log(err);
       });
-    },
-    onCapture: function onCapture() {
-      this.img = this.$refs.webcam.capture();
     },
     onError: function onError(error) {
       console.log("On Error Event", error);
@@ -2323,14 +2486,16 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     enviarFoto: function enviarFoto() {
       console.log(this.recursos.faces[0].face_token);
       console.log(this.img);
+      console.log(this.recursos.faces.length);
       $('#webcamModal').modal('toggle');
       $('#image').val(this.recursos.faces[0].face_token);
     },
     guardarFoto: function guardarFoto() {
       var quality = this.recursos.faces[0].attributes.facequality.value;
+      var facelength = this.recursos.faces.length;
       console.log(quality);
 
-      if (quality >= 85.1) {
+      if (quality >= 83.1 && facelength === 1) {
         this.draw(this.img);
         $('#loading-gif').hide();
         $('#canvas-div').show();
@@ -9087,7 +9252,7 @@ var components = {
 /*!****************************************************************!*\
   !*** ./node_modules/bootstrap-vue/esm/components/index.esm.js ***!
   \****************************************************************/
-/*! exports provided: componentsPlugin, BVModalPlugin, BVToastPlugin, AlertPlugin, BadgePlugin, BreadcrumbPlugin, ButtonPlugin, ButtonGroupPlugin, ButtonToolbarPlugin, InputGroupPlugin, CardPlugin, CarouselPlugin, LayoutPlugin, CollapsePlugin, DropdownPlugin, EmbedPlugin, FormPlugin, FormGroupPlugin, FormCheckboxPlugin, FormRadioPlugin, FormInputPlugin, FormTextareaPlugin, FormFilePlugin, FormSelectPlugin, ImagePlugin, JumbotronPlugin, LinkPlugin, ListGroupPlugin, MediaPlugin, ModalPlugin, NavPlugin, NavbarPlugin, PaginationPlugin, PaginationNavPlugin, PopoverPlugin, ProgressPlugin, SpinnerPlugin, TablePlugin, TabsPlugin, ToastPlugin, TooltipPlugin, BAlert, BBadge, BBreadcrumb, BBreadcrumbItem, BBreadcrumbLink, BButton, BButtonClose, BButtonGroup, BButtonToolbar, BInputGroup, BInputGroupAddon, BInputGroupPrepend, BInputGroupAppend, BInputGroupText, BCard, BCardHeader, BCardBody, BCardTitle, BCardSubTitle, BCardFooter, BCardImg, BCardImgLazy, BCardText, BCardGroup, BCarousel, BCarouselSlide, BContainer, BRow, BCol, BFormRow, BCollapse, BDropdown, BDropdownItem, BDropdownItemButton, BDropdownHeader, BDropdownDivider, BDropdownForm, BDropdownText, BDropdownGroup, BEmbed, BForm, BFormDatalist, BFormText, BFormInvalidFeedback, BFormValidFeedback, BFormGroup, BFormCheckbox, BFormCheckboxGroup, BFormRadio, BFormRadioGroup, BFormInput, BFormTextarea, BFormFile, BFormSelect, BImg, BImgLazy, BJumbotron, BLink, BListGroup, BListGroupItem, BMedia, BMediaAside, BMediaBody, BModal, BNav, BNavItem, BNavText, BNavForm, BNavItemDropdown, BNavbar, BNavbarNav, BNavbarBrand, BNavbarToggle, BPagination, BPaginationNav, BPopover, BProgress, BProgressBar, BSpinner, BTable, BTabs, BTab, BToast, BToaster, BTooltip */
+/*! exports provided: BVModalPlugin, BVToastPlugin, AlertPlugin, BadgePlugin, BreadcrumbPlugin, ButtonPlugin, ButtonGroupPlugin, ButtonToolbarPlugin, InputGroupPlugin, CardPlugin, CarouselPlugin, LayoutPlugin, CollapsePlugin, DropdownPlugin, EmbedPlugin, FormPlugin, FormGroupPlugin, FormCheckboxPlugin, FormRadioPlugin, FormInputPlugin, FormTextareaPlugin, FormFilePlugin, FormSelectPlugin, ImagePlugin, JumbotronPlugin, LinkPlugin, ListGroupPlugin, MediaPlugin, ModalPlugin, NavPlugin, NavbarPlugin, PaginationPlugin, PaginationNavPlugin, PopoverPlugin, ProgressPlugin, SpinnerPlugin, TablePlugin, TabsPlugin, ToastPlugin, TooltipPlugin, BAlert, BBadge, BBreadcrumb, BBreadcrumbItem, BBreadcrumbLink, BButton, BButtonClose, BButtonGroup, BButtonToolbar, BInputGroup, BInputGroupAddon, BInputGroupPrepend, BInputGroupAppend, BInputGroupText, BCard, BCardHeader, BCardBody, BCardTitle, BCardSubTitle, BCardFooter, BCardImg, BCardImgLazy, BCardText, BCardGroup, BCarousel, BCarouselSlide, BContainer, BRow, BCol, BFormRow, BCollapse, BDropdown, BDropdownItem, BDropdownItemButton, BDropdownHeader, BDropdownDivider, BDropdownForm, BDropdownText, BDropdownGroup, BEmbed, BForm, BFormDatalist, BFormText, BFormInvalidFeedback, BFormValidFeedback, BFormGroup, BFormCheckbox, BFormCheckboxGroup, BFormRadio, BFormRadioGroup, BFormInput, BFormTextarea, BFormFile, BFormSelect, BImg, BImgLazy, BJumbotron, BLink, BListGroup, BListGroupItem, BMedia, BMediaAside, BMediaBody, BModal, BNav, BNavItem, BNavText, BNavForm, BNavItemDropdown, BNavbar, BNavbarNav, BNavbarBrand, BNavbarToggle, BPagination, BPaginationNav, BPopover, BProgress, BProgressBar, BSpinner, BTable, BTabs, BTab, BToast, BToaster, BTooltip, componentsPlugin */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19476,7 +19641,7 @@ var NAME = 'BTooltip'; // @vue/component
 /*!****************************************************************!*\
   !*** ./node_modules/bootstrap-vue/esm/directives/index.esm.js ***!
   \****************************************************************/
-/*! exports provided: directivesPlugin, VBTogglePlugin, VBModalPlugin, VBScrollspyPlugin, VBTooltipPlugin, VBPopoverPlugin, VBToggle, VBModal, VBScrollspy, VBTooltip, VBPopover */
+/*! exports provided: VBTogglePlugin, VBModalPlugin, VBScrollspyPlugin, VBTooltipPlugin, VBPopoverPlugin, VBToggle, VBModal, VBScrollspy, VBTooltip, VBPopover, directivesPlugin */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20991,7 +21156,7 @@ var removeTooltip = function removeTooltip(el) {
 /*!*************************************************!*\
   !*** ./node_modules/bootstrap-vue/esm/index.js ***!
   \*************************************************/
-/*! exports provided: BVConfigPlugin, BVConfig, BootstrapVue, install, setConfig, default, componentsPlugin, directivesPlugin, BVModalPlugin, BVToastPlugin, AlertPlugin, BadgePlugin, BreadcrumbPlugin, ButtonPlugin, ButtonGroupPlugin, ButtonToolbarPlugin, InputGroupPlugin, CardPlugin, CarouselPlugin, LayoutPlugin, CollapsePlugin, DropdownPlugin, EmbedPlugin, FormPlugin, FormGroupPlugin, FormCheckboxPlugin, FormRadioPlugin, FormInputPlugin, FormTextareaPlugin, FormFilePlugin, FormSelectPlugin, ImagePlugin, JumbotronPlugin, LinkPlugin, ListGroupPlugin, MediaPlugin, ModalPlugin, NavPlugin, NavbarPlugin, PaginationPlugin, PaginationNavPlugin, PopoverPlugin, ProgressPlugin, SpinnerPlugin, TablePlugin, TabsPlugin, ToastPlugin, TooltipPlugin, BAlert, BBadge, BBreadcrumb, BBreadcrumbItem, BBreadcrumbLink, BButton, BButtonClose, BButtonGroup, BButtonToolbar, BInputGroup, BInputGroupAddon, BInputGroupPrepend, BInputGroupAppend, BInputGroupText, BCard, BCardHeader, BCardBody, BCardTitle, BCardSubTitle, BCardFooter, BCardImg, BCardImgLazy, BCardText, BCardGroup, BCarousel, BCarouselSlide, BContainer, BRow, BCol, BFormRow, BCollapse, BDropdown, BDropdownItem, BDropdownItemButton, BDropdownHeader, BDropdownDivider, BDropdownForm, BDropdownText, BDropdownGroup, BEmbed, BForm, BFormDatalist, BFormText, BFormInvalidFeedback, BFormValidFeedback, BFormGroup, BFormCheckbox, BFormCheckboxGroup, BFormRadio, BFormRadioGroup, BFormInput, BFormTextarea, BFormFile, BFormSelect, BImg, BImgLazy, BJumbotron, BLink, BListGroup, BListGroupItem, BMedia, BMediaAside, BMediaBody, BModal, BNav, BNavItem, BNavText, BNavForm, BNavItemDropdown, BNavbar, BNavbarNav, BNavbarBrand, BNavbarToggle, BPagination, BPaginationNav, BPopover, BProgress, BProgressBar, BSpinner, BTable, BTabs, BTab, BToast, BToaster, BTooltip, VBTogglePlugin, VBModalPlugin, VBScrollspyPlugin, VBTooltipPlugin, VBPopoverPlugin, VBToggle, VBModal, VBScrollspy, VBTooltip, VBPopover */
+/*! exports provided: BVConfigPlugin, BVConfig, BootstrapVue, install, setConfig, default, BVModalPlugin, BVToastPlugin, AlertPlugin, BadgePlugin, BreadcrumbPlugin, ButtonPlugin, ButtonGroupPlugin, ButtonToolbarPlugin, InputGroupPlugin, CardPlugin, CarouselPlugin, LayoutPlugin, CollapsePlugin, DropdownPlugin, EmbedPlugin, FormPlugin, FormGroupPlugin, FormCheckboxPlugin, FormRadioPlugin, FormInputPlugin, FormTextareaPlugin, FormFilePlugin, FormSelectPlugin, ImagePlugin, JumbotronPlugin, LinkPlugin, ListGroupPlugin, MediaPlugin, ModalPlugin, NavPlugin, NavbarPlugin, PaginationPlugin, PaginationNavPlugin, PopoverPlugin, ProgressPlugin, SpinnerPlugin, TablePlugin, TabsPlugin, ToastPlugin, TooltipPlugin, BAlert, BBadge, BBreadcrumb, BBreadcrumbItem, BBreadcrumbLink, BButton, BButtonClose, BButtonGroup, BButtonToolbar, BInputGroup, BInputGroupAddon, BInputGroupPrepend, BInputGroupAppend, BInputGroupText, BCard, BCardHeader, BCardBody, BCardTitle, BCardSubTitle, BCardFooter, BCardImg, BCardImgLazy, BCardText, BCardGroup, BCarousel, BCarouselSlide, BContainer, BRow, BCol, BFormRow, BCollapse, BDropdown, BDropdownItem, BDropdownItemButton, BDropdownHeader, BDropdownDivider, BDropdownForm, BDropdownText, BDropdownGroup, BEmbed, BForm, BFormDatalist, BFormText, BFormInvalidFeedback, BFormValidFeedback, BFormGroup, BFormCheckbox, BFormCheckboxGroup, BFormRadio, BFormRadioGroup, BFormInput, BFormTextarea, BFormFile, BFormSelect, BImg, BImgLazy, BJumbotron, BLink, BListGroup, BListGroupItem, BMedia, BMediaAside, BMediaBody, BModal, BNav, BNavItem, BNavText, BNavForm, BNavItemDropdown, BNavbar, BNavbarNav, BNavbarBrand, BNavbarToggle, BPagination, BPaginationNav, BPopover, BProgress, BProgressBar, BSpinner, BTable, BTabs, BTab, BToast, BToaster, BTooltip, componentsPlugin, VBTogglePlugin, VBModalPlugin, VBScrollspyPlugin, VBTooltipPlugin, VBPopoverPlugin, VBToggle, VBModal, VBScrollspy, VBTooltip, VBPopover, directivesPlugin */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21008,8 +21173,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BVConfigPlugin", function() { return _bv_config__WEBPACK_IMPORTED_MODULE_4__["default"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BVConfig", function() { return _bv_config__WEBPACK_IMPORTED_MODULE_4__["default"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "componentsPlugin", function() { return _components_index_esm__WEBPACK_IMPORTED_MODULE_2__["componentsPlugin"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BVModalPlugin", function() { return _components_index_esm__WEBPACK_IMPORTED_MODULE_2__["BVModalPlugin"]; });
 
@@ -21261,7 +21424,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTooltip", function() { return _components_index_esm__WEBPACK_IMPORTED_MODULE_2__["BTooltip"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "directivesPlugin", function() { return _directives_index_esm__WEBPACK_IMPORTED_MODULE_3__["directivesPlugin"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "componentsPlugin", function() { return _components_index_esm__WEBPACK_IMPORTED_MODULE_2__["componentsPlugin"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBTogglePlugin", function() { return _directives_index_esm__WEBPACK_IMPORTED_MODULE_3__["VBTogglePlugin"]; });
 
@@ -21282,6 +21445,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBTooltip", function() { return _directives_index_esm__WEBPACK_IMPORTED_MODULE_3__["VBTooltip"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBPopover", function() { return _directives_index_esm__WEBPACK_IMPORTED_MODULE_3__["VBPopover"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "directivesPlugin", function() { return _directives_index_esm__WEBPACK_IMPORTED_MODULE_3__["directivesPlugin"]; });
 
 /*!
  * BoostrapVue 2.0.0-rc.22
@@ -65786,10 +65951,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/authApiComponent.vue?vue&type=template&id=c21c12d4&":
-/*!*******************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/authApiComponent.vue?vue&type=template&id=c21c12d4& ***!
-  \*******************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/continuousAuth.vue?vue&type=template&id=282e30e2&":
+/*!*****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/continuousAuth.vue?vue&type=template&id=282e30e2& ***!
+  \*****************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -65801,40 +65966,577 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
+  return _c("div", [
+    _vm._m(0),
+    _vm._v(" "),
     _c(
       "div",
-      { staticClass: "border" },
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "validateModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "validateModalLabel",
+          "aria-hidden": "true",
+          "data-backdrop": "static"
+        }
+      },
       [
-        _c("vue-web-cam", {
-          ref: "webcam",
-          staticClass: "img-fluid img-thumbnail",
-          staticStyle: { display: "none" },
-          attrs: { "device-id": _vm.deviceId },
-          on: { error: _vm.onError, cameras: _vm.onCameras }
-        }),
-        _vm._v(" "),
-        _c("figure", { staticClass: "figure" }, [
-          _c(
-            "canvas",
-            {
-              ref: "canvas",
-              staticClass: "img-fluid",
-              attrs: { id: "canvas" }
-            },
-            [
-              _vm._v(
-                "\n          Your browser does not support the HTML5 canvas tag.\n          "
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content " }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("p", [
+                  _vm._v(
+                    "Por motivos de seguridad, valide su sesión nuevamente"
+                  )
+                ]),
+                _vm._v(" "),
+                _vm._m(2),
+                _vm._v(" "),
+                _c(
+                  "form",
+                  {
+                    attrs: { method: "POST" },
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.validarSesion($event)
+                      }
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "form-group row" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "col-md-4 col-form-label text-md-right",
+                          attrs: { for: "email" }
+                        },
+                        [_vm._v("E-Mail")]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.email,
+                              expression: "email"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            id: "email",
+                            type: "email",
+                            name: "email",
+                            value: "email",
+                            required: "",
+                            autocomplete: "email",
+                            autofocus: ""
+                          },
+                          domProps: { value: _vm.email },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.email = $event.target.value
+                            }
+                          }
+                        })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group row" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "col-md-4 col-form-label text-md-right",
+                          attrs: { for: "password" }
+                        },
+                        [_vm._v("Contraseña")]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.password,
+                              expression: "password"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            id: "password",
+                            type: "password",
+                            name: "password",
+                            min: "8",
+                            required: "",
+                            autocomplete: "current-password"
+                          },
+                          domProps: { value: _vm.password },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.password = $event.target.value
+                            }
+                          }
+                        })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group row" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "col-md-4 col-form-label text-md-right"
+                        },
+                        [_vm._v("Foto actual")]
+                      ),
+                      _vm._v(" "),
+                      _c("figure", { staticClass: "figure col-md-6" }, [
+                        _c("img", {
+                          ref: "faceframe",
+                          staticClass: "img-fluid mx-auto",
+                          attrs: { src: _vm.img, id: "faceframe" }
+                        })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _vm._m(3)
+                  ]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "inicioModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "inicioModalLabel",
+          "aria-hidden": "true",
+          "data-backdrop": "static"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(4),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "carousel slide",
+                  attrs: {
+                    id: "carouselContent",
+                    "data-ride": "carousel",
+                    "data-interval": "false",
+                    "data-wrap": "false"
+                  }
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "carousel-inner",
+                      attrs: { role: "listbox" }
+                    },
+                    [
+                      _vm._m(5),
+                      _vm._v(" "),
+                      _vm._m(6),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "carousel-item text-left p4" }, [
+                        _c("div", { staticClass: "modal-body" }, [
+                          _c("div", { staticClass: "container" }, [
+                            _c("li", { staticClass: "col-sm-11" }, [
+                              _vm._v(
+                                "Asegúrese que su rostro se encuentra en imagen mostrada a continuación."
+                              )
+                            ]),
+                            _c("br"),
+                            _vm._v(" "),
+                            _c("li", { staticClass: "col-sm-11" }, [
+                              _vm._v(
+                                "Si no se muestra ninguna imagen, asegúrese de revisar lo mencionado anteriormente."
+                              )
+                            ]),
+                            _c("br"),
+                            _vm._v(" "),
+                            _c("li", { staticClass: "col-sm-11" }, [
+                              _vm._v(
+                                "Una vez su rostro se encuentre en la imagen a continuación, presione el botón comenzar para ir al cuestionario"
+                              )
+                            ]),
+                            _c("br"),
+                            _vm._v(" "),
+                            _c(
+                              "label",
+                              {
+                                staticClass:
+                                  "col-md-4 col-form-label text-md-right"
+                              },
+                              [_vm._v("Captura actual")]
+                            ),
+                            _vm._v(" "),
+                            _c("figure", { staticClass: "figure col-md-6" }, [
+                              _c("img", {
+                                staticClass: "img-fluid mx-auto",
+                                attrs: { src: _vm.img }
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _vm._m(7)
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "modal-footer" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "btn btn-secondary",
+                              attrs: {
+                                href: "#carouselContent",
+                                role: "button",
+                                "data-slide": "prev"
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                        Atras"
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "btn btn-success",
+                              attrs: {
+                                href: "#carouselContent",
+                                role: "button"
+                              },
+                              on: {
+                                click: function($event) {
+                                  return _vm.beginTest()
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                        Comenzar"
+                              )
+                            ]
+                          )
+                        ])
+                      ])
+                    ]
+                  )
+                ]
               )
-            ]
-          )
-        ])
-      ],
-      1
-    )
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c(
+        "div",
+        { staticClass: "border" },
+        [
+          _c("vue-web-cam", {
+            ref: "webcam",
+            staticClass: "img-fluid",
+            attrs: { "device-id": _vm.deviceId },
+            on: { error: _vm.onError, cameras: _vm.onCameras }
+          })
+        ],
+        1
+      )
+    ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "nowebcamModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "nowebcamModalLabel",
+          "aria-hidden": "true",
+          "data-backdrop": "static"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "h5",
+                  {
+                    staticClass: "modal-title",
+                    attrs: { id: "webcamModalLabel" }
+                  },
+                  [_vm._v("Conexión con cámara")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("p", [
+                  _vm._v(
+                    "No hay comunicación con la cámara del dispositivo, por favor revise los permisos."
+                  )
+                ]),
+                _vm._v(" "),
+                _c("p", [
+                  _c("strong", [
+                    _vm._v("Active la cámara y reingrese al cuestionario.")
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "a",
+                  { attrs: { href: "javascript:location.reload(true)" } },
+                  [_vm._v("Recargar la página")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "validateModallLabel" } },
+        [_vm._v("Validar sesión")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "alert alert-danger",
+        staticStyle: { display: "none" },
+        attrs: { id: "incorrectdata-alert" }
+      },
+      [
+        _c("strong", [_vm._v("Datos inválidos o rostro no detectado,")]),
+        _vm._v(" Intente nuevamente.\n                    ")
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+        [
+          _vm._v(
+            "\n                                    Validar Sesión\n                             "
+          )
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "inicioModalLabel" } },
+        [_vm._v("Instrucciones")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "carousel-item active text-left p4" }, [
+      _c("div", { staticClass: "modal-body" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("li", { staticClass: "col-sm-11" }, [
+            _vm._v(
+              "Este cuestionario funciona a través de la detección de su rostro registrado,\n                                            por lo cual necesita acceso a la cámara web de su computadora."
+            )
+          ]),
+          _c("br"),
+          _vm._v(" "),
+          _c("li", { staticClass: "col-sm-11" }, [
+            _vm._v(
+              "Asegúrese de permitir el uso de la cámara en esta página a través del navegador web. "
+            )
+          ]),
+          _c("br"),
+          _vm._v(" "),
+          _c("li", { staticClass: "col-sm-11" }, [
+            _vm._v(
+              "Lo registrado por la cámara no se guardará en ningún caso, la detección se hace en tiempo real. "
+            )
+          ]),
+          _c("br"),
+          _vm._v(" "),
+          _c("li", { staticClass: "col-sm-11" }, [
+            _vm._v(
+              "Una vez se asegure de tener la cámara configurada, presione en el botón "
+            ),
+            _c("strong", [_vm._v("siguiente")]),
+            _vm._v(". ")
+          ]),
+          _c("br")
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "modal-footer" }, [
+        _c(
+          "a",
+          {
+            staticClass: "btn btn-info",
+            attrs: {
+              href: "#carouselContent",
+              role: "button",
+              "data-slide": "next"
+            }
+          },
+          [_vm._v("\n                                        Siguiente")]
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "carousel-item text-left p4" }, [
+      _c("div", { staticClass: "modal-body" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("li", { staticClass: "col-sm-11" }, [
+            _vm._v(
+              "El sistema detectará el número de rostros en pantalla,\n                                            si detecta más de uno pedirá validar su sesión hasta que detecte solo un rostro nuevamente."
+            )
+          ]),
+          _c("br"),
+          _vm._v(" "),
+          _c("li", { staticClass: "col-sm-11" }, [
+            _vm._v(
+              "En caso de que su rostro no se encuentre en el campo de visión de la cámara o no se encuentre detectable,\n                                            el sistema pedirá validar sesión igualmente."
+            )
+          ]),
+          _c("br"),
+          _vm._v(" "),
+          _c("li", { staticClass: "col-sm-11" }, [
+            _vm._v(
+              "Asegúrese de tener el rostro lo más claro posible, no cubra su rostro con las manos o objetos similares,\n                                             los lentes claros no darán problemas de autenticación."
+            )
+          ]),
+          _c("br"),
+          _vm._v(" "),
+          _c("li", { staticClass: "col-sm-11" }, [
+            _vm._v(
+              "Asegúrese de tener buena iluminación en el lugar donde realizará el cuestionario."
+            )
+          ]),
+          _c("br")
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "modal-footer" }, [
+        _c(
+          "a",
+          {
+            staticClass: "btn btn-secondary",
+            attrs: {
+              href: "#carouselContent",
+              role: "button",
+              "data-slide": "prev"
+            }
+          },
+          [_vm._v("\n                                        Atras")]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            staticClass: "btn btn-info",
+            attrs: {
+              href: "#carouselContent",
+              role: "button",
+              "data-slide": "next"
+            }
+          },
+          [_vm._v("\n                                        Siguiente")]
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "alert alert-danger",
+        staticStyle: { display: "none" },
+        attrs: { id: "incorrectdataInicio-alert" }
+      },
+      [
+        _c("strong", [_vm._v("rostro no detectado aún,")]),
+        _vm._v(" Intente nuevamente.\n                                        ")
+      ]
+    )
+  }
+]
 render._withStripped = true
 
 
@@ -66033,7 +66735,11 @@ var staticRenderFns = [
         attrs: { id: "noface-alert" }
       },
       [
-        _c("strong", [_vm._v("Rostro no detectado! (¿Mala iluminación?)")]),
+        _c("strong", [
+          _vm._v(
+            "Rostro no detectado! (¿Mala iluminación?)(¿Mas de una persona?)"
+          )
+        ]),
         _vm._v(" Intente nuevamente.\n                      ")
       ]
     )
@@ -78223,7 +78929,7 @@ Vue.use(bootstrap_vue__WEBPACK_IMPORTED_MODULE_0__["default"]);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
-Vue.component('authapi-component', __webpack_require__(/*! ./components/authApiComponent.vue */ "./resources/js/components/authApiComponent.vue")["default"]);
+Vue.component('authapi-component', __webpack_require__(/*! ./components/continuousAuth.vue */ "./resources/js/components/continuousAuth.vue")["default"]);
 Vue.component('webcam-component', __webpack_require__(/*! ./components/WebcamComponent.vue */ "./resources/js/components/WebcamComponent.vue")["default"]);
 Vue.component('register-component', __webpack_require__(/*! ./components/faceRegister.vue */ "./resources/js/components/faceRegister.vue")["default"]);
 /**
@@ -78445,17 +79151,17 @@ module.exports = "/images/loading.gif?d28a82548d42b91cb6178313d7c08876";
 
 /***/ }),
 
-/***/ "./resources/js/components/authApiComponent.vue":
-/*!******************************************************!*\
-  !*** ./resources/js/components/authApiComponent.vue ***!
-  \******************************************************/
+/***/ "./resources/js/components/continuousAuth.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/components/continuousAuth.vue ***!
+  \****************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _authApiComponent_vue_vue_type_template_id_c21c12d4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./authApiComponent.vue?vue&type=template&id=c21c12d4& */ "./resources/js/components/authApiComponent.vue?vue&type=template&id=c21c12d4&");
-/* harmony import */ var _authApiComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./authApiComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/authApiComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _continuousAuth_vue_vue_type_template_id_282e30e2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./continuousAuth.vue?vue&type=template&id=282e30e2& */ "./resources/js/components/continuousAuth.vue?vue&type=template&id=282e30e2&");
+/* harmony import */ var _continuousAuth_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./continuousAuth.vue?vue&type=script&lang=js& */ "./resources/js/components/continuousAuth.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -78465,9 +79171,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _authApiComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _authApiComponent_vue_vue_type_template_id_c21c12d4___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _authApiComponent_vue_vue_type_template_id_c21c12d4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _continuousAuth_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _continuousAuth_vue_vue_type_template_id_282e30e2___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _continuousAuth_vue_vue_type_template_id_282e30e2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -78477,38 +79183,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/authApiComponent.vue"
+component.options.__file = "resources/js/components/continuousAuth.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/authApiComponent.vue?vue&type=script&lang=js&":
-/*!*******************************************************************************!*\
-  !*** ./resources/js/components/authApiComponent.vue?vue&type=script&lang=js& ***!
-  \*******************************************************************************/
+/***/ "./resources/js/components/continuousAuth.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/continuousAuth.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_authApiComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./authApiComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/authApiComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_authApiComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_continuousAuth_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./continuousAuth.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/continuousAuth.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_continuousAuth_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/authApiComponent.vue?vue&type=template&id=c21c12d4&":
-/*!*************************************************************************************!*\
-  !*** ./resources/js/components/authApiComponent.vue?vue&type=template&id=c21c12d4& ***!
-  \*************************************************************************************/
+/***/ "./resources/js/components/continuousAuth.vue?vue&type=template&id=282e30e2&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/continuousAuth.vue?vue&type=template&id=282e30e2& ***!
+  \***********************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_authApiComponent_vue_vue_type_template_id_c21c12d4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./authApiComponent.vue?vue&type=template&id=c21c12d4& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/authApiComponent.vue?vue&type=template&id=c21c12d4&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_authApiComponent_vue_vue_type_template_id_c21c12d4___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_continuousAuth_vue_vue_type_template_id_282e30e2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./continuousAuth.vue?vue&type=template&id=282e30e2& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/continuousAuth.vue?vue&type=template&id=282e30e2&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_continuousAuth_vue_vue_type_template_id_282e30e2___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_authApiComponent_vue_vue_type_template_id_c21c12d4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_continuousAuth_vue_vue_type_template_id_282e30e2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

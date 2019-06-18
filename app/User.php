@@ -1,6 +1,6 @@
 <?php
 
-namespace BiometriaIEE;
+namespace BiometriaIIE;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;

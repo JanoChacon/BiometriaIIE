@@ -1,6 +1,6 @@
 <?php
 
-namespace BiometriaIEE\Http\Middleware;
+namespace BiometriaIIE\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;

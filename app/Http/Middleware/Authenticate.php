@@ -1,6 +1,6 @@
 <?php
 
-namespace BiometriaIEE\Http\Middleware;
+namespace BiometriaIIE\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 

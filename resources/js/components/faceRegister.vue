@@ -25,7 +25,7 @@
                             />
                         </figure>
                         <div class="alert alert-danger" style="display: none" id="noface-alert">
-                            <strong>Rostro no detectado! (¿Mala iluminación?)</strong> Intente nuevamente.
+                            <strong>Rostro no detectado! (¿Mala iluminación?)(¿Mas de una persona?)</strong> Intente nuevamente.
                         </div>
                         <figure id="canvas-div" style="display: none">
                             <canvas ref="canvas" id="canvas" class="img-fluid img-thumbnail">
@@ -93,7 +93,7 @@ export default {
 
         formData.append('image64', this.img);
         formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-        axios.post("http://127.0.0.1:8000/apicall", formData, {
+        axios.post("http://127.0.0.1:8000/api-detect", formData, {
                 headers: {
                   'Content-Type': 'multipart/form-data'
                 }
@@ -104,10 +104,6 @@ export default {
         }).catch(err => {
             console.log(err);
         });
-    },
-
-    onCapture() {
-      this.img = this.$refs.webcam.capture();
     },
     onError(error) {
       console.log("On Error Event", error);
@@ -149,15 +145,18 @@ export default {
     enviarFoto(){
         console.log(this.recursos.faces[0].face_token);
         console.log(this.img);
+        console.log(this.recursos.faces.length);
+
         $('#webcamModal').modal('toggle');
         $('#image').val(this.recursos.faces[0].face_token);
     },
     guardarFoto(){
 
         var quality = this.recursos.faces[0].attributes.facequality.value;
+        var facelength = this.recursos.faces.length
         console.log(quality);
 
-        if (quality >= 85.1) {
+        if (quality >= 83.1 && facelength === 1) {
             this.draw(this.img);
             $('#loading-gif').hide();
             $('#canvas-div').show();

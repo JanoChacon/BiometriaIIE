@@ -1,8 +1,8 @@
 <?php
 
-namespace BiometriaIEE\Http\Controllers\Auth;
+namespace BiometriaIIE\Http\Controllers\Auth;
 
-use BiometriaIEE\Http\Controllers\Controller;
+use BiometriaIIE\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class ResetPasswordController extends Controller

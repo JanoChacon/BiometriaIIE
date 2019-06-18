@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'BiometriaIIE'),
 
     /*
     |--------------------------------------------------------------------------
@@ -169,11 +169,11 @@ return [
         /*
          * Application Service Providers...
          */
-        BiometriaIEE\Providers\AppServiceProvider::class,
-        BiometriaIEE\Providers\AuthServiceProvider::class,
-        // BiometriaIEE\Providers\BroadcastServiceProvider::class,
-        BiometriaIEE\Providers\EventServiceProvider::class,
-        BiometriaIEE\Providers\RouteServiceProvider::class,
+        BiometriaIIE\Providers\AppServiceProvider::class,
+        BiometriaIIE\Providers\AuthServiceProvider::class,
+        // BiometriaIIE\Providers\BroadcastServiceProvider::class,
+        BiometriaIIE\Providers\EventServiceProvider::class,
+        BiometriaIIE\Providers\RouteServiceProvider::class,
 
     ],
 

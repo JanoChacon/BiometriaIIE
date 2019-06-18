@@ -37,7 +37,7 @@
     },
     "autoload": {
         "psr-4": {
-            "BiometriaIEE\\": "app/"
+            "BiometriaIIE\\": "app/"
         },
         "classmap": [
             "database/seeds",

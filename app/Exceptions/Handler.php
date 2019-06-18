@@ -1,6 +1,6 @@
 <?php
 
-namespace BiometriaIEE\Exceptions;
+namespace BiometriaIIE\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;

@@ -1,12 +1,12 @@
 <?php
 
-namespace BiometriaIEE;
+namespace BiometriaIIE;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Pregunta extends Model
 {
     public function cuestionario(){
-        return $this->belongsTo('BiometriaIEE\Cuestionario');
+        return $this->belongsTo('BiometriaIIE\Cuestionario');
     }
 }
