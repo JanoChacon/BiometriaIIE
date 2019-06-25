@@ -224,8 +224,10 @@ export default {
                     this.conf = this.conf/2;
                 }
 
-                if (this.conf < 78 && this.facelength != 1 && this.begin) {
-                    $('#validateModal').modal('show');
+                if (this.conf <= 70 || this.facelength != 1) {
+                    if (this.begin) {
+                        $('#validateModal').modal('show');
+                    }
                 }
 
             }).catch(err => {

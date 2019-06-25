@@ -2242,8 +2242,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
             _this2.conf = _this2.conf / 2;
           }
 
-          if (_this2.conf < 78 && _this2.facelength != 1 && _this2.begin) {
-            $('#validateModal').modal('show');
+          if (_this2.conf <= 70 || _this2.facelength != 1) {
+            if (_this2.begin) {
+              $('#validateModal').modal('show');
+            }
           }
         })["catch"](function (err) {
           console.log(err);
@@ -2339,7 +2341,6 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-//
 //
 //
 //
@@ -66645,20 +66646,6 @@ var render = function() {
                         }
                       },
                       [_vm._v("Guardar rostro")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-warning",
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            return _vm.validar()
-                          }
-                        }
-                      },
-                      [_vm._v("Otro rostro")]
                     )
                   ]
                 )

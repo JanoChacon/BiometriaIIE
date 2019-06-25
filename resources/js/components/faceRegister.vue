@@ -32,7 +32,6 @@
                                 Your browser does not support the HTML5 canvas tag.
                             </canvas>
                             <button type="button" class="btn btn-success" v-on:click="enviarFoto()">Guardar rostro</button>
-                            <button type="button" class="btn btn-warning" v-on:click="validar()">Otro rostro</button>
                         </figure>
 
                     </div>

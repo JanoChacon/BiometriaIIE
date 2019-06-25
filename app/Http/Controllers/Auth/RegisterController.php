@@ -7,6 +7,7 @@ use BiometriaIIE\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use GuzzleHttp\Client;
 
 class RegisterController extends Controller
 {
@@ -58,12 +59,41 @@ class RegisterController extends Controller
 
     /**
      * Create a new user instance after a valid registration.
+     * Envia el facetoken a la api para registrarlo en el faceset
      *
      * @param  array  $data
      * @return \BiometriaIIE\User
      */
     protected function create(array $data)
     {
+
+        $api_key = '_vFHc0ga_XbxiA12BaZq8O8_0GQqAV5F';
+        $api_secret = 'g8d6IiLW7GfQyfWKh5oTOSjsMvL5SjZr';
+        $url = 'https://api-us.faceplusplus.com/facepp/v3';
+
+        $client = new Client();
+
+        $client->post($url . "/faceset/addface", [
+            'form_params' => [
+                'api_key'      => $api_key,
+                'api_secret'   => $api_secret,
+                'outer_id'     => 'iie1',
+                'face_tokens'  => $data['image'],
+            ],
+        ]);
+
+        $arr = array("@" => "A","." => "Dot","&" => "AnD");
+        $user_id = strtr($data['email'],$arr);
+
+        $client->post( $url . "/face/setuserid", [
+            'form_params' => [
+                'api_key'     => $api_key,
+                'api_secret'  => $api_secret,
+                'face_token'  => $data['image'],
+                'user_id'     => $user_id,
+            ],
+        ]);
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
