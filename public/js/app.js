@@ -2174,6 +2174,27 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['refreshData'],
@@ -2341,7 +2362,6 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-//
 //
 //
 //
@@ -65970,6 +65990,8 @@ var render = function() {
   return _c("div", [
     _vm._m(0),
     _vm._v(" "),
+    _vm._m(1),
+    _vm._v(" "),
     _c(
       "div",
       {
@@ -65989,7 +66011,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content " }, [
-              _vm._m(1),
+              _vm._m(2),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("p", [
@@ -65998,7 +66020,7 @@ var render = function() {
                   )
                 ]),
                 _vm._v(" "),
-                _vm._m(2),
+                _vm._m(3),
                 _vm._v(" "),
                 _c(
                   "form",
@@ -66115,7 +66137,7 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
-                    _vm._m(3)
+                    _vm._m(4)
                   ]
                 )
               ])
@@ -66144,7 +66166,7 @@ var render = function() {
           { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(4),
+              _vm._m(5),
               _vm._v(" "),
               _c(
                 "div",
@@ -66165,9 +66187,9 @@ var render = function() {
                       attrs: { role: "listbox" }
                     },
                     [
-                      _vm._m(5),
-                      _vm._v(" "),
                       _vm._m(6),
+                      _vm._v(" "),
+                      _vm._m(7),
                       _vm._v(" "),
                       _c("div", { staticClass: "carousel-item text-left p4" }, [
                         _c("div", { staticClass: "modal-body" }, [
@@ -66209,7 +66231,7 @@ var render = function() {
                               })
                             ]),
                             _vm._v(" "),
-                            _vm._m(7)
+                            _vm._m(8)
                           ])
                         ]),
                         _vm._v(" "),
@@ -66307,10 +66329,7 @@ var staticRenderFns = [
               _c("div", { staticClass: "modal-header" }, [
                 _c(
                   "h5",
-                  {
-                    staticClass: "modal-title",
-                    attrs: { id: "webcamModalLabel" }
-                  },
+                  { staticClass: "modal-title", attrs: { id: "webcamModal" } },
                   [_vm._v("Conexión con cámara")]
                 )
               ]),
@@ -66325,6 +66344,65 @@ var staticRenderFns = [
                 _c("p", [
                   _c("strong", [
                     _vm._v("Active la cámara y reingrese al cuestionario.")
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "a",
+                  { attrs: { href: "javascript:location.reload(true)" } },
+                  [_vm._v("Recargar la página")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "noconexionModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "noconexionModalLabel",
+          "aria-hidden": "true",
+          "data-backdrop": "static"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "h5",
+                  {
+                    staticClass: "modal-title",
+                    attrs: { id: "noconexionModal" }
+                  },
+                  [_vm._v("Conexión con cámara")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("p", [_vm._v("No hay comunicación con el servidor.")]),
+                _vm._v(" "),
+                _c("p", [
+                  _c("strong", [
+                    _vm._v(
+                      "Por favor revise su conexión a internet y reingrese al cuestionario."
+                    )
                   ])
                 ])
               ]),
@@ -66376,6 +66454,10 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-footer" }, [
+      _c("a", { staticClass: "btn btn-danger", attrs: { href: "home" } }, [
+        _vm._v("Salir del cuestionario")
+      ]),
+      _vm._v(" "),
       _c(
         "button",
         { staticClass: "btn btn-primary", attrs: { type: "submit" } },

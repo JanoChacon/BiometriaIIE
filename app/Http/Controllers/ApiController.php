@@ -54,6 +54,7 @@ class ApiController extends Controller{
                     'face_token1' => $user->image,
                     'image_base64_2' => $img_base64,
                 ],
+                ['connect_timeout' => 3.14],
             ]);
             if ($img_base64 != "") {
                 return response($response->getBody()->getContents(), 200);

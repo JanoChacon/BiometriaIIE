@@ -6,11 +6,29 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="webcamModalLabel">Conexión con cámara</h5>
+                    <h5 class="modal-title" id="webcamModal">Conexión con cámara</h5>
                 </div>
                 <div class="modal-body">
                     <p>No hay comunicación con la cámara del dispositivo, por favor revise los permisos.</p>
                     <p><strong>Active la cámara y reingrese al cuestionario.</strong></p>
+                </div>
+                <div class="modal-footer">
+                    <a href="javascript:location.reload(true)">Recargar la página</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Modal Conexion -->
+    <div class="modal fade" id="noconexionModal" tabindex="-1" role="dialog" aria-labelledby="noconexionModalLabel" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="noconexionModal">Conexión con cámara</h5>
+                </div>
+                <div class="modal-body">
+                    <p>No hay comunicación con el servidor.</p>
+                    <p><strong>Por favor revise su conexión a internet y reingrese al cuestionario.</strong></p>
                 </div>
                 <div class="modal-footer">
                     <a href="javascript:location.reload(true)">Recargar la página</a>
@@ -55,7 +73,10 @@
                                 <img :src="img" ref="faceframe" class="img-fluid mx-auto" id="faceframe">
                             </figure>
                         </div>
+
+
                         <div class="modal-footer">
+                            <a class="btn btn-danger" href="home">Salir del cuestionario</a>
                             <button type="submit" class="btn btn-primary">
                                     Validar Sesión
                              </button>
@@ -205,7 +226,8 @@ export default {
 
             formData.append('image64', this.img);
             formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-            axios.post("http://127.0.0.1:8000/api-compare", formData, {
+
+            axios.post("http://127.0.0.1:8000/api-compare",  formData, {
                     headers: {
                     'Content-Type': 'multipart/form-data'
                     }
