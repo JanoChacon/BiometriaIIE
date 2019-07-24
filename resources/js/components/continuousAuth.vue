@@ -216,7 +216,7 @@ export default {
 
     validarRostro() {
 
-        if (this.img != this.$refs.webcam.capture() && this.deviceId != null) {
+        if (this.deviceId != null) {
 
             this.img = this.$refs.webcam.capture();
 
@@ -261,7 +261,7 @@ export default {
     },
 
     beginTest(){
-        if (this.deviceId != null && this.img != this.$refs.webcam.capture()) {
+        if (this.img != null) {
             if (this.recursos.confidence >= 78 && this.recursos.faces2.length ==1) {
                 this.begin = true;
                 $('#inicioModal').modal('hide');
@@ -276,14 +276,9 @@ export default {
 
     validarSesion(){
 
-        console.log("confidence api para sesion: " + this.recursos.confidence);
-        console.log("promedio para sesion: "+ this.conf);
-        console.log( "device para sesion : " + this.deviceId);
-
         if (this.recursos.confidence > 78 && this.facelength ==1) {
 
             let formData = new FormData();
-
             formData.append('email', this.email);
             formData.append('password', this.password);
             formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');

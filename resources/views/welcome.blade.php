@@ -11,7 +11,7 @@
 
         <!-- Styles -->
         <style>
-            html, body {
+            body {
                 background-color: #B0C4DE;
                 color: #636b6f;
                 font-family: 'Nunito', sans-serif;
@@ -29,6 +29,16 @@
                 display: flex;
                 justify-content: center;
             }
+            .container-fluid{
+                background-color: white;
+                padding: 0 25px;
+                font-size: 13px;
+                font-weight: 600;
+                letter-spacing: .1rem;
+                text-decoration: none;
+                text-transform: uppercase;
+                justify-content: center;
+            }
 
             .position-ref {
                 position: relative;
@@ -41,11 +51,13 @@
             }
 
             .content {
-                text-align: center;
+                text-align: left;
             }
 
             .title {
-                font-size: 84px;
+                font-family: 'Nunito', sans-serif;
+                text-align: center;
+                font-size: 42px;
             }
 
             .links > a {
@@ -61,6 +73,14 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+            .footer {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                text-align: center;
+            }
+        </style>
         </style>
     </head>
     <body>
@@ -79,13 +99,15 @@
                 </div>
             @endif
 
-            <div class="content">
-                <div class="title m-b-md">
-                    Biometria IIE
+                <div class="row container-fluid m-b-md">
+                    <div class="title">
+                        Biometría IIE
+                    </div>
+                    <p>Prototipo de integración de reconocimiento facial en cuestionarios online.<br></p>
                 </div>
-
-
-            </div>
+        </div>
+        <div class="footer">
+            Alejandro Chacón - IIE
         </div>
     </body>
 </html>

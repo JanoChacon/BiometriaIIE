@@ -24,7 +24,6 @@ Vue.use(BootstrapVue);
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('authapi-component', require('./components/continuousAuth.vue').default);
-Vue.component('webcam-component', require('./components/WebcamComponent.vue').default);
 Vue.component('register-component', require('./components/faceRegister.vue').default);
 
 
